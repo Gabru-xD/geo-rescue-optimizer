@@ -76,7 +76,7 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     
     // Update the resource status
     const updatedResources = resources.map(r => 
-      r.id === resourceId ? { ...r, status: 'dispatched' } : r
+      r.id === resourceId ? { ...r, status: 'dispatched' as const } : r
     );
     setResources(updatedResources);
     
@@ -86,7 +86,7 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         if (incident.id === incidentId) {
           return {
             ...incident,
-            assignedResources: [...incident.assignedResources, { ...resource, status: 'dispatched' }],
+            assignedResources: [...incident.assignedResources, { ...resource, status: 'dispatched' as const }],
           };
         }
         return incident;
@@ -97,7 +97,7 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (activeIncident && activeIncident.id === incidentId) {
       setActiveIncident({
         ...activeIncident,
-        assignedResources: [...activeIncident.assignedResources, { ...resource, status: 'dispatched' }],
+        assignedResources: [...activeIncident.assignedResources, { ...resource, status: 'dispatched' as const }],
       });
     }
     
@@ -108,7 +108,7 @@ export const EmergencyProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const unassignResource = (incidentId: string, resourceId: string) => {
     // Update the resource status
     const updatedResources = resources.map(r => 
-      r.id === resourceId ? { ...r, status: 'available' } : r
+      r.id === resourceId ? { ...r, status: 'available' as const } : r
     );
     setResources(updatedResources);
     
