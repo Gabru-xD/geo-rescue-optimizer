@@ -104,11 +104,15 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+  }
 }
 
 @layer components {
   .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20;
+    @apply backdrop-blur-md bg-white/10 border border-white/20 shadow-lg;
   }
   
   .map-container {
@@ -135,24 +139,83 @@
     @apply bg-emergency-critical/20 text-emergency-critical border border-emergency-critical/30;
   }
 
+  /* Card Effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Button Effects */
+  .btn-hover-effect {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+  
+  .btn-hover-effect::after {
+    @apply content-[''] absolute inset-0 bg-white/20 scale-x-0 origin-left transition-transform duration-300;
+  }
+  
+  .btn-hover-effect:hover::after {
+    @apply scale-x-100;
+  }
+
+  /* Animation Classes */
   .animate-enter {
     @apply opacity-0;
     animation: enter 0.4s ease forwards;
   }
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  
+  .animate-slide-in {
+    @apply -translate-x-10 opacity-0;
+    animation: slideIn 0.5s ease forwards;
+  }
+  
+  .animate-scale-in {
+    @apply scale-95 opacity-0;
+    animation: scaleIn 0.3s ease forwards;
   }
 
   .grid-dashboard {
     display: grid;
     grid-template-columns: 280px 1fr;
+  }
+}
+
+/* Keyframes */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .responsive-padding {
+    @apply px-4;
   }
 }
