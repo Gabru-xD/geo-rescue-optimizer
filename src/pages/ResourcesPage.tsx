@@ -31,12 +31,14 @@ const ResourcesPage = () => {
     rescue: 'Rescue Team'
   };
   
+  // Filter available resources by checking their status
   const availableResources = resources.filter(r => 
-    !r.assignedToIncidentId
+    r.status === 'available'
   );
   
+  // Filter assigned resources by checking their status (any status that's not 'available')
   const assignedResources = resources.filter(r => 
-    r.assignedToIncidentId
+    r.status !== 'available'
   );
 
   return (
