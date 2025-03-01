@@ -1,69 +1,75 @@
-# Welcome to your Lovable project
 
-## Project info
+# Emergency Management System
 
-**URL**: https://lovable.dev/projects/ab3e972b-9a7e-4dec-8e59-580e138e7448
+A real-time emergency management web application with MongoDB integration and geospatial vector search capabilities.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Interactive map showing emergency incidents
+- Real-time incident reporting and tracking
+- Resource allocation and management
+- Analytics dashboard with data visualization
+- MongoDB integration with vector search
+- Geospatial queries for nearby resources and incidents
 
-**Use Lovable**
+## Setup
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ab3e972b-9a7e-4dec-8e59-580e138e7448) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (v16+)
+- MongoDB Atlas account (for the database)
 
-**Use your preferred IDE**
+### Environment Variables
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Create a `.env` file in the root directory with the following:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+VITE_MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<dbname>
 ```
 
-**Edit a file directly in GitHub**
+Replace `<username>`, `<password>`, `<cluster>`, and `<dbname>` with your MongoDB Atlas credentials.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Installation
 
-**Use GitHub Codespaces**
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Run the development server:
+   ```
+   npm run dev
+   ```
+4. Open http://localhost:5173 in your browser
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## MongoDB Setup
 
-## What technologies are used for this project?
+1. Create a MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
+2. Create a new cluster
+3. In the "Security" tab, create a new database user
+4. In the "Network Access" tab, add your IP address or allow access from anywhere
+5. Get your connection string from the "Connect" button on your cluster
+6. Add the connection string to your `.env` file as `VITE_MONGODB_URI`
 
-This project is built with .
+## MongoDB Vector Search
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+This application uses MongoDB's geospatial indexing and query capabilities to:
 
-## How can I deploy this project?
+1. Find incidents near a specific location
+2. Identify available resources closest to an emergency
+3. Optimize resource allocation based on proximity
 
-Simply open [Lovable](https://lovable.dev/projects/ab3e972b-9a7e-4dec-8e59-580e138e7448) and click on Share -> Publish.
+The application automatically creates 2dsphere indexes on the relevant fields when it first connects to the database.
 
-## I want to use a custom domain - is that possible?
+## Data Model
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+The application uses two main collections:
+
+1. `incidents` - Stores emergency incidents with location data
+2. `resources` - Stores emergency resources with location and availability status
+
+## Usage
+
+The application will automatically sync data between the frontend and MongoDB. If MongoDB is not available, it will fall back to using in-memory data.
+
+When you first run the application with a new MongoDB database, it will seed the database with sample data.

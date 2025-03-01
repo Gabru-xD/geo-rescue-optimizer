@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 const IncidentForm = () => {
   const { addIncident } = useEmergency();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -34,7 +35,7 @@ const IncidentForm = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate form
@@ -43,48 +44,55 @@ const IncidentForm = () => {
       return;
     }
     
-    // Create new incident
-    const newIncident = {
-      id: `incident-${Date.now()}`,
-      title: formData.title,
-      description: formData.description,
-      type: formData.type,
-      priority: formData.priority as any,
-      status: 'pending' as const,
-      location: {
-        address: formData.address,
-        // In a real app, we'd geocode the address to get coordinates
-        coordinates: {
-          latitude: 37.7749 + (Math.random() * 0.05 - 0.025),
-          longitude: -122.4194 + (Math.random() * 0.05 - 0.025),
+    setIsSubmitting(true);
+    
+    try {
+      // Create new incident
+      const newIncident = {
+        id: `incident-${Date.now()}`,
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        priority: formData.priority as any,
+        status: 'pending' as const,
+        location: {
+          address: formData.address,
+          // In a real app, we'd geocode the address to get coordinates
+          coordinates: {
+            latitude: 37.7749 + (Math.random() * 0.05 - 0.025),
+            longitude: -122.4194 + (Math.random() * 0.05 - 0.025),
+          },
         },
-      },
-      reportedTime: new Date().toISOString(),
-      estimatedResponseTime: Math.floor(Math.random() * 15) + 1,
-      assignedResources: [],
-      affectedPeople: formData.affectedPeople ? parseInt(formData.affectedPeople) : undefined,
-      updates: [
-        {
-          timestamp: new Date().toISOString(),
-          message: `New ${formData.type.toLowerCase()} incident reported.`,
-          author: 'System',
-        },
-      ],
-    };
-    
-    addIncident(newIncident);
-    
-    // Reset form
-    setFormData({
-      title: '',
-      description: '',
-      type: '',
-      priority: '',
-      address: '',
-      affectedPeople: '',
-    });
-    
-    toast.success('New incident reported successfully');
+        reportedTime: new Date().toISOString(),
+        estimatedResponseTime: Math.floor(Math.random() * 15) + 1,
+        assignedResources: [],
+        affectedPeople: formData.affectedPeople ? parseInt(formData.affectedPeople) : undefined,
+        updates: [
+          {
+            timestamp: new Date().toISOString(),
+            message: `New ${formData.type.toLowerCase()} incident reported.`,
+            author: 'System',
+          },
+        ],
+      };
+      
+      await addIncident(newIncident);
+      
+      // Reset form
+      setFormData({
+        title: '',
+        description: '',
+        type: '',
+        priority: '',
+        address: '',
+        affectedPeople: '',
+      });
+    } catch (error) {
+      console.error('Error submitting incident:', error);
+      toast.error('Failed to report incident. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (
@@ -99,6 +107,7 @@ const IncidentForm = () => {
           value={formData.title}
           onChange={handleChange}
           placeholder="Incident title"
+          disabled={isSubmitting}
         />
       </div>
       
@@ -110,6 +119,7 @@ const IncidentForm = () => {
           <Select
             value={formData.type}
             onValueChange={(value) => handleSelectChange('type', value)}
+            disabled={isSubmitting}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select type" />
@@ -135,6 +145,7 @@ const IncidentForm = () => {
           <Select
             value={formData.priority}
             onValueChange={(value) => handleSelectChange('priority', value)}
+            disabled={isSubmitting}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select priority" />
@@ -159,6 +170,7 @@ const IncidentForm = () => {
           value={formData.address}
           onChange={handleChange}
           placeholder="Address"
+          disabled={isSubmitting}
         />
       </div>
       
@@ -173,6 +185,7 @@ const IncidentForm = () => {
           onChange={handleChange}
           placeholder="Describe the incident"
           rows={3}
+          disabled={isSubmitting}
         />
       </div>
       
@@ -187,11 +200,12 @@ const IncidentForm = () => {
           value={formData.affectedPeople}
           onChange={handleChange}
           placeholder="Number of affected people"
+          disabled={isSubmitting}
         />
       </div>
       
-      <Button type="submit" className="w-full">
-        Report Incident
+      <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Report Incident'}
       </Button>
     </form>
   );
