@@ -14,12 +14,25 @@ import { useEmergency } from '../context/EmergencyContext';
 import { Button } from '@/components/ui/button';
 
 type EmergencyCardProps = {
-  incident: Incident;
+  incident?: Incident;
   compact?: boolean;
 };
 
-const EmergencyCard: React.FC<EmergencyCardProps> = ({ incident, compact = false }) => {
-  const { setActiveIncident } = useEmergency();
+const EmergencyCard: React.FC<EmergencyCardProps> = ({ incident: propIncident, compact = false }) => {
+  const { setActiveIncident, activeIncident } = useEmergency();
+  
+  // Use provided incident prop or fall back to activeIncident from context
+  const incident = propIncident || activeIncident;
+
+  // If no incident is available, show a placeholder
+  if (!incident) {
+    return (
+      <div className="border rounded-lg p-5 bg-card h-full flex flex-col items-center justify-center text-center">
+        <p className="text-muted-foreground">No incident selected.</p>
+        <p className="text-muted-foreground text-sm mt-2">Select an incident from the map or report a new one.</p>
+      </div>
+    );
+  }
   
   const getStatusIcon = () => {
     switch (incident.status) {
