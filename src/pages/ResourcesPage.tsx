@@ -2,7 +2,7 @@
 import React from 'react';
 import { useEmergency } from '../context/EmergencyContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Truck, AlertCircle, Users, MapPin } from 'lucide-react';
+import { Truck, AlertCircle, Users, MapPin, Ambulance, Shield, Fire, Flask, Sparkles } from 'lucide-react';
 import { ResourceType } from '../types';
 import { Button } from '@/components/ui/button';
 import ResourceAllocation from '../components/ResourceAllocation';
@@ -13,11 +13,15 @@ const ResourcesPage = () => {
   const getResourceIcon = (type: ResourceType) => {
     switch (type) {
       case 'ambulance':
-        return <AlertCircle className="h-4 w-4" />;
+        return <Ambulance className="h-4 w-4" />;
       case 'police':
-        return <AlertCircle className="h-4 w-4" />;
+        return <Shield className="h-4 w-4" />;
       case 'fire_truck':
-        return <AlertCircle className="h-4 w-4" />;
+        return <Fire className="h-4 w-4" />;
+      case 'hazmat':
+        return <Flask className="h-4 w-4" />;
+      case 'rescue':
+        return <Sparkles className="h-4 w-4" />;
       default:
         return <Truck className="h-4 w-4" />;
     }

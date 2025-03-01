@@ -19,6 +19,7 @@ export const validateEnv = () => {
   
   if (!MONGODB_URI) {
     missingVars.push('VITE_MONGODB_URI');
+    console.warn('VITE_MONGODB_URI is not set. The application will use mock data.');
   }
   
   return {
